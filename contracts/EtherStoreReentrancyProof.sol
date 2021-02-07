@@ -2,6 +2,7 @@ pragma solidity ^0.6.10;
 
 contract EtherStoreReentrancyProof {
     mapping(address => uint256) public balances;
+    bool locked;
 
     function deposit() public payable {
         balances[msg.sender] += msg.value;

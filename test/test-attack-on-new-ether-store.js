@@ -16,15 +16,16 @@ describe('Attack', function () {
             expect(await attack.etherStore()).to.equal(etherStoreReentrancyProof.address);
         });
     });
-    // describe('Testing the Attack Function', () => {
-    //     it('Should steal ether from the smart contract', async () => {
-    //         etherStoreReentrancyProof.connect(accounts[1]);
-    //         await etherStoreReentrancyProof.deposit({value: ethers.utils.parseEther("1.0")});
-    //         etherStoreReentrancyProof.connect(accounts[2]);
-    //         await etherStoreReentrancyProof.deposit({value: ethers.utils.parseEther("1.0")});
-    //         attack.connect(accounts[0]);
-    //         await attack.attack({value: ethers.utils.parseEther('1.0')});
-    //         expect(await attack.getBalance()).to.equal(ethers.BigNumber.from('0x29a2241af62c0000'.toLowerCase()))
-    //     })
-    // })
+    describe('Testing the Attack Function', () => {
+        it('Should not steal ether from the smart contract', async () => {
+            etherStoreReentrancyProof.connect(accounts[1]);
+            await etherStoreReentrancyProof.deposit({value: ethers.utils.parseEther("1.0")});
+            attack.connect(accounts[0]);
+            try {
+                await attack.attack({value: ethers.utils.parseEther('1.0')})
+            } catch {
+                expect(await etherStoreReentrancyProof.getBalance()).to.equal(ethers.utils.parseEther("1.0"));
+            }
+        })
+    })
 });
